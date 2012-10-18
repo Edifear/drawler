@@ -1,0 +1,184 @@
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="js/jquery-1.7.1.js"></script>
+        <style type="text/css">
+            * {margin: 0; padding: 0}
+            body {background: #151220; color: #aaa}
+            div {float: left; margin:20px 50px 20px 20px; border: 2px solid #933;}
+            p {float: left; width: 50px; margin: 20px}
+            #color label {display: inline-block; width: 15px; text-align: center;}
+            #color {padding: 20px}
+            #changecolor {text-align: center}
+            #changecolor input {width: 50px}
+            #chat {clear: left; padding: 10px}
+            #list {list-style: none; height: 200px; width: 300px; margin: 10px; overflow: auto}
+            #nik {border: none; margin: 0; padding: 5px; width: 200px; float: none;}
+            #addForm {display: none}
+            #msg {width: 275px; height: 30px;}
+        </style>
+        <title>DRAW!!!</title>
+    </head>
+    <body>
+        <p>Total Image :</p>
+        <div>
+            <canvas id="canvas-1" width='400' height='400'></canvas>
+        </div>
+        <div>
+            <p>choose color :</p>
+            <div id='color'>
+                <form action="changeColor" id='changeColor' method='POST'>
+                    <label for="r">R</label>
+                    <input type="number" id='r'>
+                    <label for="g">G</label>
+                    <input type="number" id='g'>
+                    <label for="b">B</label>
+                    <input type="number" id='b'>
+                    <input type="submit" value='Ok'>
+                </form>
+            </div>
+            <div id="chat">
+                <h3>SkypOs:</h3>
+                <div id='nik'>
+                    <label for="myName">myName: </label>
+                    <input type="text" id='myName' placeholder='karasik'>
+                </div>
+                <ul id='list'></ul>
+                <form id='addForm' action='/' method='post'>
+                    <input id='msg' name='msg' type='text'>
+                    <input id="send" type='submit' value='Send!'>
+                </form>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var socket = io.connect('edifear.eu01.aws.af.cm:43447'),
+                Window = $(window),
+                dot = {},
+
+                can = $('#canvas-1'),
+                ctx = can[0].getContext('2d');
+
+                draw();
+                changeColor();
+                chat();
+
+                function chat () {
+                    var name;
+
+                    $('#myName').on('keydown', function(e) {
+                        if (e.keyCode == 13) {$('#nik').hide(300, function() {$('#addForm').show()})}
+                        name = $(this).val();
+                    })
+                    $('#addForm').on('submit', function(e) {
+                        e.preventDefault();
+
+                        var msg = {
+                            name: name,
+                            massage: $('#msg').val()
+                        };
+
+                        var li = $('<li></li>').text(msg.name+': '+msg.massage);
+                        $('#list').append(li);
+
+
+
+                        socket.emit('msg', msg);
+
+                        $('#msg').val('');
+                        $('#list').animate({
+                            scrollTop: $("#list")[0].scrollHeight
+                        }, 300);
+                    })
+
+                    socket.on('msg', function (data) {
+                        var li = $('<li></li>')
+                            .text(data.name+': '+data.massage);
+
+                        $('#list').append(li)
+                    });
+                }
+
+                function changeColor() {
+                    $('#changeColor').on('submit', function(e){
+                        e.preventDefault();
+                    })
+                }
+
+                function draw() {
+                    var color = randomRGBA();
+
+                    can.bind('mousedown', function(evt) {
+
+                        var canX = can.position().left,
+                            canY = can.position().top,
+                            X1 = evt.pageX - canX,
+                            Y1 = evt.pageY - canY;
+
+                        var _preventDefault = function(evt) { evt.preventDefault(); };
+                        Window.bind("dragstart", _preventDefault).bind("selectstart", _preventDefault);
+
+                        Window.bind('mousemove', function(e) {
+
+                            var X = e.pageX - canX;
+                            var Y = e.pageY - canY;
+
+                            ctx.save();
+                            line(ctx, X1, Y1, X, Y, color)
+                            ctx.restore();
+
+                            dot.x1 = X1;
+                            dot.y1 = Y1;
+                            dot.x2 = X;
+                            dot.y2 = Y;
+                            dot.c = color;
+
+                            X1 = X;
+                            Y1 = Y;
+
+                            socket.emit('line', dot);
+                        })
+
+                        Window.one('mouseup', function() {
+                            Window.unbind('mousemove').unbind("dragstart").unbind("selectstart");
+                        })
+
+                    })
+
+                    socket.on('line', function (data) {
+                        line(ctx, data.x1, data.y1, data.x2, data.y2, data.c)
+                    });
+                }
+                function circle(ctx, x, y, r) {
+                    ctx.beginPath();
+                    ctx.arc(x, y, r, 0, Math.PI*2, true);
+                    ctx.fillStyle = "rgba(255, 255, 255, .5)";
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                function randomRGBA() {
+                    var r = Math.floor(Math.random()*255),
+                        g = Math.floor(Math.random()*255),
+                        b = Math.floor(Math.random()*255),
+                        a = 1,
+                        color = 'rgba('+r+','+g+','+b+','+a+')';
+                    return color;
+                }
+                function line(ctx, x, y, x1, y1, rgba) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = randomRGBA();
+                    ctx.lineWidth = 4;
+                    ctx.moveTo(x,y);
+                    ctx.lineTo(x1,y1);
+                    ctx.stroke();
+                    ctx.arc(x1, y1, 2, 0, Math.PI*2, true);
+                    ctx.fillStyle = randomRGBA();
+                    ctx.fill();
+                }
+
+                // testik();
+        </script>
+
+    </body>
+</html>

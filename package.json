@@ -1,0 +1,15 @@
+{
+  "name": "drawler",
+  "subdomain": "edifear.drawler",
+  "scripts": {
+    "start": "app.js"
+  },
+  "version": "0.0.0",
+  "engines": {
+    "node": "0.8.x"
+  },
+  "dependencies": {
+    "express": ">= undefined",
+    "socket.io": "0.9.x"
+  }
+}
