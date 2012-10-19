@@ -35,6 +35,8 @@
                     <input type="number" id='g'>
                     <label for="b">B</label>
                     <input type="number" id='b'>
+                    <label for="a">A</label>
+                    <input type="text" id='a'>
                     <input type="submit" value='Ok'>
                 </form>
             </div>
@@ -53,9 +55,10 @@
         </div>
 
         <script type="text/javascript">
-            var socket = io.connect('http://drawler.jit.su'),
+            var socket = io.connect('http://drawler.jit.su' || 'http://localhost:8000' ),
                 Window = $(window),
                 dot = {},
+                color = randomRGBA(),
 
                 can = $('#canvas-1'),
                 ctx = can[0].getContext('2d');
@@ -103,11 +106,21 @@
                 function changeColor() {
                     $('#changeColor').on('submit', function(e){
                         e.preventDefault();
+
+                        var r = $('#r').val(),
+                            g = $('#g').val(),
+                            b = $('#b').val(),
+                            a = $('#a').val();
+
+                        color.r = r || color.r;
+                        color.g = g || color.g;
+                        color.b = b || color.b;
+                        color.a = a || color.a;
                     })
                 }
 
                 function draw() {
-                    var color = randomRGBA();
+
 
                     can.bind('mousedown', function(evt) {
 
@@ -162,18 +175,18 @@
                         g = Math.floor(Math.random()*255),
                         b = Math.floor(Math.random()*255),
                         a = 1,
-                        color = 'rgba('+r+','+g+','+b+','+a+')';
+                        color = {r: r, g: g, b: b, a: a};
                     return color;
                 }
                 function line(ctx, x, y, x1, y1, rgba) {
                     ctx.beginPath();
-                    ctx.strokeStyle = randomRGBA();
+                    ctx.strokeStyle = 'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+rgba.a+')';
                     ctx.lineWidth = 4;
                     ctx.moveTo(x,y);
                     ctx.lineTo(x1,y1);
                     ctx.stroke();
                     ctx.arc(x1, y1, 2, 0, Math.PI*2, true);
-                    ctx.fillStyle = randomRGBA();
+                    ctx.fillStyle = 'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+rgba.a+')';
                     ctx.fill();
                 }
 
