@@ -1,15 +1,19 @@
 {
-  "name": "drawler",
-  "subdomain": "edifear.drawler",
+  "name": "drawler.net",
+  "subdomain": "drawler",
   "scripts": {
     "start": "app.js"
   },
-  "version": "0.0.0",
+  "version": "0.0.0-5",
   "engines": {
     "node": "0.8.x"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Edifear/drawler.git"
+  },
   "dependencies": {
-    "express": ">= undefined",
+    "express": "*",
     "socket.io": "0.9.x"
   }
 }

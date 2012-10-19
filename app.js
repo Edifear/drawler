@@ -4,7 +4,7 @@ var express = require('express'),
     server = http.createServer(app),
     io = require('socket.io').listen(server);
 
-server.listen(process.env.VMC_APP_PORT || 8000);
+server.listen(process.env.VMC_APP_PORT || 80);
 
 app.use(app.router);
 app.use(express.static(__dirname + "/static"))
