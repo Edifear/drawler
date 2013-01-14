@@ -1,0 +1,63 @@
+/* RESET STYLES*/
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+body {
+    line-height:1;
+}
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section {
+    display:block;
+}
+nav ul {
+    list-style:none;
+}
+ol, ul {
+   list-style: none;
+}
+
+.clearfix{*zoom:1;}.clearfix:before,.clearfix:after{display:table;content:"";line-height:0;}
+.clearfix:after{clear:both;}
+
+/*----- Main styles -----*/
+
+html, body {
+    background: #111;
+}
+.wrapper {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+a {
+    color: #aaa;
+    text-decoration: none;
+}
+
+.canvas-wrapper {
+    margin-top: 50px;
+    background: black;
+    border: 6px solid #222;
+    border-radius: 2px;
+    box-shadow: 0 0 2px black;
+    -o-box-shadow: 0 0 2px #000;
+    -moz-box-shadow: 0 0 2px #000;
+    -webkit-box-shadow: 0 0 2px black;
+}

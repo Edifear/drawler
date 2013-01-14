@@ -51,11 +51,16 @@
                     <input id='msg' name='msg' type='text'>
                     <input id="send" type='submit' value='Send!'>
                 </form>
+                <form action="..." method="post" enctype="multipart/form-data">
+                    <input name="file" type="file" />
+                    <input type="button" value="Upload" />
+                </form>
+                <progress></progress>
             </div>
         </div>
 
         <script type="text/javascript">
-            var socket = io.connect('http://drawler.jit.su' || 'http://localhost:8000' ),
+            var socket = io.connect(/*'http://drawler.jit.su' || */'http://localhost:8000'),
                 Window = $(window),
                 dot = {},
                 color = randomRGBA(),
@@ -70,9 +75,48 @@
                 function chat () {
                     var name;
 
+                    $(':file').change(function(){
+                        var file = this.files[0];
+                        console.log(this.files)
+                    });
+
+                    $(':button').click(function(){
+                        var formData = new FormData($('form')[0]);
+                        $.ajax({
+                            url: '/upload',  //server script to process data
+                            type: 'POST',
+                            // xhr: function() {  // custom xhr
+                            //     myXhr = $.ajaxSettings.xhr();
+                            //     if(myXhr.upload){ // check if upload property exists
+                            //         myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // for handling the progress of the upload
+                            //     }
+                            //     return myXhr;
+                            // },
+                            //Ajax events
+                            beforeSend: console.log('starting...'),
+                            success: console.log('complete...'),
+                            error: console.log('error'),
+                            // Form data
+                            data: formData,
+                            //Options to tell JQuery not to process data or worry about content-type
+                            cache: false,
+                            contentType: false,
+                            processData: false
+                        });
+                    });
+
+                    function progressHandlingFunction(e){
+                        if(e.lengthComputable){
+                            $('progress').attr({value:e.loaded,max:e.total});
+                        }
+                    }
+
                     $('#myName').on('keydown', function(e) {
-                        if (e.keyCode == 13) {$('#nik').hide(300, function() {$('#addForm').show()})}
-                        name = $(this).val();
+                        if (e.keyCode == 13) {
+                            console.log($(this).val())
+                        /*$('#nik').hide(300, function() {$('#addForm').show()})*/}
+                        // name = $(this).val();
+
                     })
                     $('#addForm').on('submit', function(e) {
                         e.preventDefault();
