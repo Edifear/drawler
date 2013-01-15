@@ -21,9 +21,9 @@
                 mouse = utils.captureMouse(canvas),
                 ball = new Ball(20, '#777'),
                 vx = Math.random() * 10 - 5,
-                vy = -10,
-                bounce = -0.7,
-                gravity = 0.2,
+                vy = -1,
+                bounce = -1,
+                gravity = 0,
                 isMouseDown = false,
                 oldX, oldY;
 
@@ -90,7 +90,7 @@
                 window.requestAnimationFrame(drawFrame, canvas);
 
                 //-- Fade out the lines slowly by drawing a rectangle over the entire canvas
-                context.fillStyle = 'rgba(0,0,0,0.4)';
+                context.fillStyle = 'rgba(0,0,0,0.5)';
                 context.fillRect(0, 0, canvas.width, canvas.height);
 
                 if (isMouseDown) {

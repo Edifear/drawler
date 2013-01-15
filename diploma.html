@@ -1,19 +1,19 @@
 <html>
     <head>
         <meta charset='utf-8'>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/js/jquery-1.7.1.js"></script>
-        <link rel="stylesheet" href="/css/main.css">
+        <script src="js/jquery-1.7.1.js"></script>
+        <link rel="stylesheet" href="css/main.css">
         <title>DRAW!!!</title>
     </head>
     <body>
-        <div class='wrapper'>
-            <canvas id="canvas-1" class='canvas-wrapper' width='600' height='300'>No Canvas!!!</canvas>
+        <div class="wrapper">
+            <div class='canvas-wrapper'>
+                <canvas id="canvas-1" width='900' height='500'></canvas>
+            </div>
         </div>
 
         <script type="text/javascript">
-            var socket = io.connect(/*'http://drawler.jit.su' || */'http://localhost:8000'),
-                Window = $(window),
+            var Window = $(window),
                 dot = {},
                 color = randomRGBA(),
 
@@ -26,13 +26,10 @@
 
                     can.bind('mousedown', function(evt) {
 
-
-                        var canX = can.offset().left,
-                            canY = can.offset().top,
-                            x1 = evt.pageX - canX,
-                            y1 = evt.pageY - canY,
-                            pX = undefined,
-                            pY = undefined;
+                        var canX = can.position().left,
+                            canY = can.position().top,
+                            X1 = evt.pageX - canX,
+                            Y1 = evt.pageY - canY;
 
                         var _preventDefault = function(evt) { evt.preventDefault(); };
                         Window.bind("dragstart", _preventDefault).bind("selectstart", _preventDefault);
@@ -43,21 +40,17 @@
                             var Y = e.pageY - canY;
 
                             ctx.save();
-                            curve(ctx, x1, y1, pX, pY, X, Y);
+                            line(ctx, X1, Y1, X, Y, color)
                             ctx.restore();
 
-                            dot.x1 = x1;
-                            dot.y1 = y1;
+                            dot.x1 = X1;
+                            dot.y1 = Y1;
                             dot.x2 = X;
                             dot.y2 = Y;
-                            dot.c = color;
+                            dot.c = randomRGBA();
 
-                            x1 = X;
-                            y1 = Y;
-
-
-
-                            // socket.emit('line', dot);
+                            X1 = X;
+                            Y1 = Y;
                         })
 
                         Window.one('mouseup', function() {
@@ -65,10 +58,6 @@
                         })
 
                     })
-
-                    socket.on('line', function (data) {
-                        line(ctx, data.x1, data.y1, data.x2, data.y2, data.c)
-                    });
                 }
                 function circle(ctx, x, y, r) {
                     ctx.beginPath();
@@ -96,19 +85,6 @@
                     ctx.fillStyle = 'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+rgba.a+')';
                     ctx.fill();
                 }
-                function curve(ctx, x,y, pX, pY, x1, y1) {
-                    ctx.beginPath();
-                    ctx.moveTo(x, y);
-                    ctx.quadraticCurveTo(pX, pY, x1, y1);
-                    ctx.lineWidth = 4;
-
-                    // line color
-                    ctx.strokeStyle = 'white';
-                    ctx.stroke();
-                }
-                curve(ctx, 0, 0, 200, 100, 0, 200)
-                curve(ctx, 0, 0, 400, 100, 0, 200)
-
         </script>
 
     </body>
