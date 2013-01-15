@@ -69,25 +69,25 @@
 
             var myGraph = new Graph({
                 canvasId: 'canvas-2',
-                minX: -20,
-                minY: -10,
-                maxX: 20,
-                maxY: 10,
+                minX: -5,
+                minY: -5,
+                maxX: 5,
+                maxY: 5,
                 unitsPerTick: 2,
                 tickSize : 8,
                 tickColor: '#fff'
             });
 
-            myGraph.drawEquation(function(x){
-                return Math.sin(x);
-            }, "green", 3);
+            // myGraph.drawEquation(function(x){
+            //     return Math.sin(x);
+            // }, "green", 3);
+
+            // myGraph.drawEquation(function(x){
+            //     return x * x;
+            // }, "blue", 3);
 
             myGraph.drawEquation(function(x){
-                return x * x;
-            }, "blue", 3);
-
-            myGraph.drawEquation(function(x){
-                return x;
+                return -(0.5)*Math.cos(2*Math.PI*x)
             }, "red", 3);
         };
     </script>
