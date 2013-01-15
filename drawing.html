@@ -11,103 +11,120 @@
             <canvas id="canvas-1" class='canvas-wrapper' width='600' height='300'>No Canvas!!!</canvas>
         </div>
 
+        <script src="/js/utils.js"></script>
         <script type="text/javascript">
             var socket = io.connect(/*'http://drawler.jit.su' || */'http://localhost:8000'),
                 Window = $(window),
                 dot = {},
-                color = randomRGBA(),
-
                 can = $('#canvas-1'),
-                ctx = can[0].getContext('2d');
+                context = can[0].getContext('2d'),
+                mouse = utils.captureMouse(can[0]);
 
-                draw();
+            context.strokeStyle = '#ff0000';
+            context.lineWidth = 4;
+            context.lineCap = 'round';
 
-                function draw() {
+            // can.bind('mousedown', function () {
+            //     context.beginPath();
+            //     context.moveTo(mouse.x, mouse.y);
+            //     can.bind('mousemove', onMouseMove);
+            // });
 
-                    can.bind('mousedown', function(evt) {
+            // can.bind('mouseup', function () {
+            //     can.unbind('mousemove', onMouseMove);
+            // });
 
+            // function onMouseMove() {
+            //     context.lineTo(mouse.x, mouse.y);
+            //     context.stroke();
+            // }
 
-                        var canX = can.offset().left,
-                            canY = can.offset().top,
-                            x1 = evt.pageX - canX,
-                            y1 = evt.pageY - canY,
-                            pX = undefined,
-                            pY = undefined;
+          // context.beginPath();
+          // context.moveTo(0, 0);
+          // context.bezierCurveTo(50, 0, 50, 100, 50, 100);
+          // context.lineWidth = 10;
 
-                        var _preventDefault = function(evt) { evt.preventDefault(); };
-                        Window.bind("dragstart", _preventDefault).bind("selectstart", _preventDefault);
-
-                        Window.bind('mousemove', function(e) {
-
-                            var X = e.pageX - canX;
-                            var Y = e.pageY - canY;
-
-                            ctx.save();
-                            curve(ctx, x1, y1, pX, pY, X, Y);
-                            ctx.restore();
-
-                            dot.x1 = x1;
-                            dot.y1 = y1;
-                            dot.x2 = X;
-                            dot.y2 = Y;
-                            dot.c = color;
-
-                            x1 = X;
-                            y1 = Y;
+          // // line color
+          // context.strokeStyle = 'red';
+          // context.stroke();
 
 
+                // draw();
 
-                            // socket.emit('line', dot);
-                        })
+                // function draw() {
 
-                        Window.one('mouseup', function() {
-                            Window.unbind('mousemove').unbind("dragstart").unbind("selectstart");
-                        })
+                //     can.bind('mousedown', function(evt) {
 
-                    })
 
-                    socket.on('line', function (data) {
-                        line(ctx, data.x1, data.y1, data.x2, data.y2, data.c)
-                    });
-                }
-                function circle(ctx, x, y, r) {
-                    ctx.beginPath();
-                    ctx.arc(x, y, r, 0, Math.PI*2, true);
-                    ctx.fillStyle = "rgba(255, 255, 255, .5)";
-                    ctx.closePath();
-                    ctx.fill();
-                }
-                function randomRGBA() {
-                    var r = Math.floor(Math.random()*255),
-                        g = Math.floor(Math.random()*255),
-                        b = Math.floor(Math.random()*255),
-                        a = 1,
-                        color = {r: r, g: g, b: b, a: a};
-                    return color;
-                }
-                function line(ctx, x, y, x1, y1, rgba) {
-                    ctx.beginPath();
-                    ctx.strokeStyle = 'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+rgba.a+')';
-                    ctx.lineWidth = 4;
-                    ctx.moveTo(x,y);
-                    ctx.lineTo(x1,y1);
-                    ctx.stroke();
-                    ctx.arc(x1, y1, 2, 0, Math.PI*2, true);
-                    ctx.fillStyle = 'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+rgba.a+')';
-                    ctx.fill();
-                }
-                function curve(ctx, x,y, pX, pY, x1, y1) {
-                    ctx.beginPath();
-                    ctx.moveTo(x, y);
-                    ctx.quadraticCurveTo(pX, pY, x1, y1);
-                    ctx.lineWidth = 4;
+                //         var canX = can.offset().left,
+                //             canY = can.offset().top,
+                //             x1 = evt.pageX - canX,
+                //             y1 = evt.pageY - canY,
+                //             pX = undefined,
+                //             pY = undefined;
 
-                    // line color
-                    ctx.strokeStyle = 'white';
-                    ctx.stroke();
-                }
-                curve(ctx, 0, 0, 200, 100, 0, 200)
-                curve(ctx, 0, 0, 400, 100, 0, 200)
+                //         var _preventDefault = function(evt) { evt.preventDefault(); };
+                //         Window.bind("dragstart", _preventDefault).bind("selectstart", _preventDefault);
+
+                //         Window.bind('mousemove', function(e) {
+
+                //             var X = e.pageX - canX;
+                //             var Y = e.pageY - canY;
+
+                //             context.save();
+                //             line(context, x1, y1, pX, pY, X, Y);
+                //             context.restore();
+
+                //             dot.x1 = x1;
+                //             dot.y1 = y1;
+                //             dot.x2 = X;
+                //             dot.y2 = Y;
+                //             dot.c = color;
+
+                //             x1 = X;
+                //             y1 = Y;
+
+
+
+                //             // socket.emit('line', dot);
+                //         })
+
+                //         Window.one('mouseup', function() {
+                //             Window.unbind('mousemove').unbind("dragstart").unbind("selectstart");
+                //         })
+
+                //     })
+
+                //     // socket.on('line', function (data) {
+                //     //     line(context, data.x1, data.y1, data.x2, data.y2, data.c)
+                //     // });
+                // }
+                // function circle(context, x, y, r) {
+                //     context.beginPath();
+                //     context.arc(x, y, r, 0, Math.PI*2, true);
+                //     context.fillStyle = "rgba(255, 255, 255, .5)";
+                //     context.closePath();
+                //     context.fill();
+                // }
+
+                // function curve(context, x,y, pX, pY, x1, y1) {
+                //     context.beginPath();
+                //     context.moveTo(x, y);
+                //     context.quadraticCurveTo(pX, pY, x1, y1);
+                //     context.lineWidth = 4;
+
+                //     // line color
+                //     context.strokeStyle = 'white';
+                //     context.stroke();
+                // }
+                // curve(context, 0, 0, 200, 100, 0, 200)
+                // curve(context, 0, 0, 400, 100, 0, 200)
+
+                // context.beginPath();
+                // context.moveTo(0, 0);
+                // context.quadraticCurveTo(100, 50, 100, 100);
+                // context.strokeStyle = 'red';
+                // context.stroke();
 
         </script>
 

@@ -9,11 +9,13 @@
         <div class='wrapper'>
             <div>
                 <canvas id="canvas"  class="canvas-wrapper" width='600' height='300'>No canvas support in your browser</canvas>
+                <canvas id="canvas-2"  class="canvas-wrapper" width='600' height='300'>No canvas support in your browser</canvas>
             </div>
         </div>
 
     <script src="/js/utils.js"></script>
     <script src="/js/ball.js"></script>
+    <script src="/js/grapher.js"></script>
     <script>
         window.onload = function () {
             function fun1(x) {return Math.sin(x);  }
@@ -37,7 +39,7 @@
                 }
 
                 function funGraph (ctx,axes,func,color,thick) {
-                    var xx, yy, dx=4, x0=axes.x0, y0=axes.y0, scale=axes.scale;
+                    var xx, yy, dx=2, x0=axes.x0, y0=axes.y0, scale=axes.scale;
                     var iMax = Math.round((ctx.canvas.width-x0)/dx);
                     var iMin = axes.doNegativeX ? Math.round(-x0/dx) : 0;
                     ctx.beginPath();
@@ -64,6 +66,29 @@
             }
 
             draw();
+
+            var myGraph = new Graph({
+                canvasId: 'canvas-2',
+                minX: -20,
+                minY: -10,
+                maxX: 20,
+                maxY: 10,
+                unitsPerTick: 2,
+                tickSize : 8,
+                tickColor: '#fff'
+            });
+
+            myGraph.drawEquation(function(x){
+                return Math.sin(x);
+            }, "green", 3);
+
+            myGraph.drawEquation(function(x){
+                return x * x;
+            }, "blue", 3);
+
+            myGraph.drawEquation(function(x){
+                return x;
+            }, "red", 3);
         };
     </script>
     </body>
