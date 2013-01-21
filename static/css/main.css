@@ -21,6 +21,7 @@ time, mark, audio, video {
 }
 body {
     line-height:1;
+    font: 14px tahoma, verdana, arial, sans-serif;
 }
 article,aside,details,figcaption,figure,
 footer,header,hgroup,menu,nav,section {
@@ -41,18 +42,54 @@ ol, ul {
 html, body {
     background: #111;
 }
-.wrapper {
-    width: 1000px;
-    margin: 0 auto;
-}
 
 a {
     color: #aaa;
     text-decoration: none;
 }
 
+.wrapper {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+header h1 {
+    padding-top: 20px;
+    font-size: 18px;
+    color: #337733;
+    text-shadow: 0 0 1px;
+}
+
+nav ul {
+    margin-top: 20px;
+    width: 300px;
+}
+
+nav a {
+    display: block;
+    border-top: 1px solid #193921;
+    border-bottom: 1px solid #051105;
+    border-left: 3px solid #112911;
+    padding-left: 6px;
+    line-height: 28px;
+    background-color: #112911;
+    box-shadow: -2px 2px 5px #000;
+    -webkit-transition: all 0.2s ease-in;
+    -moz-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+}
+
+nav a:hover {
+    border-left-color:#335533;
+    margin-right:-3px;
+    background-color: #204020;
+}
+
 .canvas-wrapper {
-    margin-top: 50px;
+    float: left;
+    margin-right: 20px;
+    margin-top: 25px;
     background: black;
     border: 6px solid #222;
     border-radius: 2px;
@@ -60,4 +97,11 @@ a {
     -o-box-shadow: 0 0 2px #000;
     -moz-box-shadow: 0 0 2px #000;
     -webkit-box-shadow: 0 0 2px black;
+}
+#log {
+    border: 2px solid #333;
+    background: #0A0A0A;
+    color: #888;
+    margin-top: 25px;
+    padding: 5px 10px;
 }
