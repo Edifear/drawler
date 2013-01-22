@@ -87,7 +87,8 @@ nav a:hover {
 }
 
 .canvas-wrapper {
-    float: left;
+    position: relative;
+    display: inline-block;
     margin-right: 20px;
     margin-top: 25px;
     background: black;
@@ -97,6 +98,18 @@ nav a:hover {
     -o-box-shadow: 0 0 2px #000;
     -moz-box-shadow: 0 0 2px #000;
     -webkit-box-shadow: 0 0 2px black;
+    overflow: hidden;
+    z-index: 10;
+}
+.canvas-wrapper canvas {
+    position: relative;
+    z-index: 10;
+}
+canvas.canvas-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9;
 }
 #log {
     border: 2px solid #333;

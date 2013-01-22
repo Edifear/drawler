@@ -1,0 +1,118 @@
+extends ../layout
+
+append scripts
+    script(src='/js/utils.js')
+    script(src='/js/ball.js')
+
+block title
+  title Reserford Experiment
+
+block header
+  h1 Reserford Experiment
+
+block content
+  .canvas-wrapper
+    canvas(id='canvas1', class='canvas-top', width='600', height='480') No canvas support in your browser
+    canvas(id='canvas2', class='canvas-back', width='600', height='480')
+  input(id='log',readonly)
+
+block add_scripts
+    script
+      var canvas = document.getElementById('canvas1'),
+          canvas2 = document.getElementById('canvas2'),
+          context = canvas.getContext('2d'),
+          context2 = canvas2.getContext('2d'),
+          particles = [],
+          numParticles = 2,
+          sun = new Ball(30, "#fa0"),
+          planet = new Ball(10, "#88f"),
+          way = new Ball(1, "#aaa"),
+          bounce = -1;
+
+      sun.x = canvas.width / 2;
+      sun.y = canvas.height / 2;
+      sun.mass = 3000;
+      particles.push(sun);
+
+      planet.x = planet.radius;
+      planet.y = planet.radius;
+      planet.vy = 5;
+      planet.vx = 8;
+      planet.mass = 1;
+      particles.push(planet);
+
+      function rotate (x, y, sin, cos, reverse) {
+        return {
+          x: (reverse) ? (x * cos + y * sin) : (x * cos - y * sin),
+          y: (reverse) ? (y * cos - x * sin) : (y * cos + x * sin)
+        };
+      }
+
+
+      function gravitate (partA, partB) {
+        var dx = partB.x - partA.x,
+            dy = partB.y - partA.y,
+            distSQ = dx * dx + dy * dy,
+            dist = Math.sqrt(distSQ),
+            force = partA.mass * partB.mass / distSQ,
+            ax = force * dx / dist,
+            ay = force * dy / dist;
+        partA.vx -= ax / partA.mass;
+        partA.vy -= ay / partA.mass;
+        partB.vx += ax / partB.mass;
+        partB.vy += ay / partB.mass;
+
+        log.value = 'Distance: ' + Math.round(dist);
+      }
+
+      function move (partA, i) {
+        partA.x += partA.vx;
+        partA.y += partA.vy;
+        for (var partB, j = i + 1; j < numParticles; j++) {
+          partB = particles[j];
+          gravitate(partA, partB);
+        }
+      }
+
+      function draw (particle) {
+        particle.draw(context);
+      }
+
+      function checkWalls (ball) {
+        if (ball.x + ball.radius > canvas.width) {
+          ball.x = canvas.width - ball.radius;
+          ball.vx *= bounce;
+        } else if (ball.x - ball.radius < 0) {
+          ball.x = ball.radius;
+          ball.vx *= bounce;
+        }
+        if (ball.y + ball.radius > canvas.height) {
+          ball.y = canvas.height - ball.radius;
+          ball.vy *= bounce;
+        } else if (ball.y - ball.radius < 0) {
+          ball.y = ball.radius;
+          ball.vy *= bounce;
+        }
+      }
+
+      function traectory(ball) {
+        way.x = ball.x;
+        way.y = ball.y;
+
+        way.draw(context2);
+      }
+
+      (function drawFrame () {
+        window.requestAnimationFrame(drawFrame, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(move);
+        checkWalls(planet);
+        sun.x = canvas.width / 2;
+        sun.y = canvas.height / 2;
+        particles.forEach(draw);
+
+        traectory(planet);
+      }());
+
+
