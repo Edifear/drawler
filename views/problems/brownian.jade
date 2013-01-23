@@ -1,0 +1,77 @@
+extends ../layout
+
+append scripts
+    script(src='/js/utils.js')
+    script(src='/js/ball.js')
+    script(src='/js/stats.min.js')
+
+block title
+  title Brownian (Random) Motion
+
+block header
+  h1 Brownian (Random) Motion
+
+block content
+  canvas(id='canvas1', class='canvas-wrapper', width='600', height='480') No canvas support in your browser
+
+block add_scripts
+    script
+      var stats = new Stats();
+        stats.setMode( 1 );
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.right = '200px';
+        stats.domElement.style.top = '30px';
+        document.body.appendChild( stats.domElement );
+
+      var canvas = document.getElementById('canvas1'),
+          context = canvas.getContext('2d'),
+          dots = [],
+          numDots = 2000,
+          friction = 0.95,
+          decay = 0.01,
+          decayColor = utils.colorToRGB("#000000", decay); //'rgba(255,255,255,0.01)'
+
+      for (var dot, i = 0; i < numDots; i++) {
+        dot = new Ball(2, Math.random() * 0xffffff);
+        dot.x = Math.random() * canvas.width;
+        dot.y = Math.random() * canvas.height;
+        dot.vx = 0;
+        dot.vy = 0;
+        dots.push(dot);
+      }
+
+      function draw (dot) {
+        dot.vx += Math.random() * 0.2 - 0.1;
+        dot.vy += Math.random() * 0.2 - 0.1;
+        dot.x += dot.vx;
+        dot.y += dot.vy;
+        dot.vx *= friction;
+        dot.vy *= friction;
+
+        if (dot.x > canvas.width) {
+          dot.x = 0;
+        } else if (dot.x < 0) {
+          dot.x = canvas.width;
+        }
+        if (dot.y > canvas.height) {
+          dot.y = 0;
+        } else if (dot.y < 0) {
+          dot.y = canvas.height;
+        }
+        dot.draw(context);
+      }
+
+      (function drawFrame () {
+        window.requestAnimationFrame(drawFrame, canvas);
+
+        stats.begin();
+
+        context.fillStyle = decayColor;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        dots.forEach(draw);
+
+        stats.end();
+      }());
+
+
