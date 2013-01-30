@@ -1,0 +1,51 @@
+extends ../layout
+
+block title
+    title Drawler
+
+block header
+    h1 Drawler
+block content
+    canvas(id='canvas1', class='canvas-wrapper', width='640', height='480') No canvas support in ypour
+
+block add_scripts
+    script(src='/js/utils.js')
+    script
+        window.onload = function () {
+          var canvas = document.getElementById('canvas1'),
+              context = canvas.getContext('2d'),
+              mouse = utils.captureMouse(canvas),
+              imagedata = context.getImageData(0, 0, canvas.width, canvas.height),
+              pixels = imagedata.data,
+              brush_size = 25,
+              brush_density = 50,
+              brush_color;
+
+          canvas.addEventListener('mousedown', function () {
+            brush_color = utils.parseColor(Math.random() * 0xffffff, true); //to number
+            canvas.addEventListener('mousemove', onMouseMove, false);
+          }, false);
+
+          canvas.addEventListener('mouseup', function () {
+            canvas.removeEventListener('mousemove', onMouseMove, false);
+          }, false);
+          console.log(pixels)
+          function onMouseMove () {
+            //loop over each brush bristle
+            for (var i = 0; i < pixels.length; i += 4) {
+              brush_color = utils.parseColor(Math.random() * 0xffffff, true); //to number
+
+              //set the color of a pixel using its component colors: r,g,b,a (0-255)
+              pixels[i]     = brush_color >> 16 & 0xff; //red
+              pixels[i + 1] = brush_color >> 8 & 0xff;  //green
+              pixels[i + 2] = brush_color & 0xff;       //blue
+              pixels[i + 3] = 100;                      //alpha
+            }
+
+            context.putImageData(imagedata, 0, 0);
+          }
+
+          onMouseMove();
+        };
+
+
