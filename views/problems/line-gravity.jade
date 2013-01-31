@@ -1,0 +1,93 @@
+extends ../layout
+
+append scripts
+    script(src='/js/utils.js')
+    script(src='/js/ball.js')
+
+block title
+  title Linear gravity
+
+block header
+  h1 Linear gravity
+
+block content
+    canvas(id='canvas1', class='canvas-wrapper', width='600', height='300') No canvas support in ypour
+
+block add_scripts
+    script
+      var canvas = document.getElementById('canvas1'),
+          context = canvas.getContext('2d'),
+          size = 15,
+          proton1 = new Ball(size, "#bb3333"),
+          proton2 = new Ball(size, "#3333ff"),
+          particles = [],
+          numParticles = 2,
+          minDist = 100,
+          springAmount = 0.2;
+
+      proton1.x = canvas.width/4;
+      proton1.y = canvas.height/2;
+      proton1.vx = 3;
+      proton1.mass = size*size;
+      particles.push(proton1);
+
+      proton2.x = canvas.width/4*3;
+      proton2.y = canvas.height/2;
+      proton2.mass = size*size;
+      particles.push(proton2);
+
+      function spring (partA, partB) {
+        var dx = partB.x - partA.x,
+            dy = partB.y - partA.y,
+            dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < minDist) {
+          var alpha = 1 - dist / minDist;
+          context.strokeStyle = utils.colorToRGB("#ffffff", alpha);
+          context.beginPath();
+          context.moveTo(partA.x, partA.y);
+          context.lineTo(partB.x, partB.y);
+          context.stroke();
+
+          var ax = dx * springAmount,
+              ay = dy * springAmount;
+          partA.vx -= ax / partA.mass;
+          partA.vy -= ay / partA.mass;
+          partB.vx += ax / partB.mass;
+          partB.vy += ay / partB.mass;
+        }
+      }
+
+      function move (partA, i) {
+        partA.x += partA.vx;
+        partA.y += partA.vy;
+        if (partA.x > canvas.width) {
+          partA.x = 0;
+        } else if (partA.x < 0) {
+          partA.x = canvas.width;
+        }
+        if (partA.y > canvas.height) {
+          partA.y = 0;
+        } else if (partA.y < 0) {
+          partA.y = canvas.height;
+        }
+        for (var partB, j = i + 1; j < numParticles; j++) {
+          partB = particles[j];
+          spring(partA, partB);
+        }
+      }
+
+      function draw (particle) {
+        particle.draw(context);
+      }
+
+      (function drawFrame () {
+        window.requestAnimationFrame(drawFrame, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(move);
+        particles.forEach(draw);
+      }());
+
+
+
