@@ -1,0 +1,43 @@
+extends layout
+
+block title
+    title Problems
+
+block header
+    h1 Приклади розв’язування задач
+
+block content
+    nav(id='problems')
+        ul(class='toplist')
+            li
+                a(href='#') Механіка
+                ul
+                    li
+                        a(href='#', data-href='/problems/ball') Graph
+            //- li
+            //-     a(href='/problems/graph') Graph
+            //- li
+            //-     a(href='/problems/drawler') Drawler
+            //- li
+            //-     a(href='/problems/ball') Ball
+            //- li
+            //-     a(href='/problems/fractal') Fractal
+            //- li
+            //-     a(href='/problems/inelastic-collision') Inelastic Collision
+            //- li
+            //-     a(href='/problems/reserford') Reserford experiment
+            //- li
+            //-     a(href='/problems/gravity-nodes') Gravitational Force Between Particles
+            //- li
+            //-     a(href='/problems/line-gravity') Linerar gravity
+            //- li
+            //-     a(href='/problems/brownian') Brownian Motion
+            //- li
+            //-     a(href='/problems/random') Random
+            //- li
+            //-     a(href='/problems/gidrostat-paradox') gidro-paradox
+            //- li
+            //-     a(href='/problems/granade') granade
+
+    section(class='iframe-box')
+        iframe(src='', width='640', height='500')

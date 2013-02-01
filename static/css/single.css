@@ -1,0 +1,31 @@
+header h1 {
+    padding-top: 20px;
+    font-size: 18px;
+    color: #337733;
+    text-shadow: 0 0 1px;
+}
+.canvas-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    margin-top: 25px;
+    background: black;
+    border: 6px solid #222;
+    border-radius: 2px;
+    box-shadow: 0 0 2px black;
+    -o-box-shadow: 0 0 2px #000;
+    -moz-box-shadow: 0 0 2px #000;
+    -webkit-box-shadow: 0 0 2px black;
+    overflow: hidden;
+    z-index: 10;
+}
+.canvas-wrapper canvas {
+    position: relative;
+    z-index: 10;
+}
+canvas.canvas-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9;
+}

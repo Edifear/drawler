@@ -60,7 +60,7 @@ header h1 {
     text-shadow: 0 0 1px;
 }
 
-nav ul {
+nav > ul {
     margin-top: 20px;
     width: 300px;
 }
@@ -80,10 +80,14 @@ nav a {
     transition: all 0.2s ease-in;
 }
 
-nav a:hover {
+nav ul li:hover > a {
     border-left-color:#335533;
     margin-right:-3px;
     background-color: #204020;
+}
+
+.iframe-box {
+
 }
 
 .canvas-wrapper {
@@ -117,4 +121,18 @@ canvas.canvas-back {
     color: #888;
     margin-top: 25px;
     padding: 5px 10px;
+}
+
+nav#problems {
+    float: left;
+    margin-right: 20px;
+}
+nav#problems ul ul {
+    /*display: none;*/
+    margin-left: 20px;
+}
+
+.iframe-box {
+    float: left;
+    background: #333;
 }

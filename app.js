@@ -19,6 +19,10 @@ app.get('/', function(req, res){
     res.render('index.jade');
 });
 
+app.get('/problems', function (req, res) {
+    res.render('problems.jade');
+});
+
 app.get('/problems/:id', function (req, res) {
     res.render('problems/'+req.params.id+'.jade');
 });
