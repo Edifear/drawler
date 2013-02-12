@@ -1,3 +1,28 @@
+/* RESET STYLES*/
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+
+body {
+    background: #aaa;
+}
 header h1 {
     padding-top: 20px;
     font-size: 18px;
@@ -8,15 +33,16 @@ header h1 {
     position: relative;
     display: inline-block;
     margin-right: 20px;
-    margin-top: 25px;
-    background: black;
-    border: 6px solid #222;
+    margin-left: 10px;
+    background: #333;
+    border: 5px solid #222;
     border-radius: 2px;
     box-shadow: 0 0 2px black;
     -o-box-shadow: 0 0 2px #000;
     -moz-box-shadow: 0 0 2px #000;
     -webkit-box-shadow: 0 0 2px black;
     overflow: hidden;
+    font-size: 0;
     z-index: 10;
 }
 .canvas-wrapper canvas {
@@ -28,4 +54,19 @@ canvas.canvas-back {
     top: 0;
     left: 0;
     z-index: 9;
+}
+
+/* Background conditions */
+
+.inelastic-collision {
+    padding-top: 170px;
+    background: #aaa url(../img/inelastic-collision.png) left top no-repeat;
+}
+.line-gravity {
+    padding-top: 120px;
+    background: #aaa url(../img/line-gravity.png) left top no-repeat;
+}
+.granade {
+    padding-top: 165px;
+    background: #aaa url(../img/granade.png) left top no-repeat;
 }

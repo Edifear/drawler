@@ -1,17 +1,20 @@
 extends ../layout
 
-append scripts
+block scripts
     script(src='/js/utils.js')
     script(src='/js/ball.js')
 
 block title
   title Linear gravity
 
+block styles
+  link(rel='stylesheet', href='/css/single.css')
+
 block header
-  h1 Linear gravity
 
 block content
-    canvas(id='canvas1', class='canvas-wrapper', width='600', height='300') No canvas support in ypour
+  div.line-gravity
+    canvas(id='canvas1', class='canvas-wrapper', width='500', height='200') No canvas support in ypour
 
 block add_scripts
     script

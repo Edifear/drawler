@@ -1,112 +1,111 @@
 extends ../layout
 
-append scripts
-    script(src='/js/utils.js')
-    script(src='/js/ball.js')
+block scripts
+  script(src='/js/utils.js')
+  script(src='/js/ball.js')
+
+block styles
+  link(rel='stylesheet', href='/css/single.css')
 
 block title
   title Inelastic Collision
 
 block header
-  h1 Inelastic Collision
 
 block content
-    canvas(id='canvas1', class='canvas-wrapper', width='600', height='300') No canvas support in ypour
-    input(id='log',readonly)
+  div.inelastic-collision
+    canvas(id='canvas1', class='canvas-wrapper', width='400', height='200') No canvas support in ypour
 
 block add_scripts
     script
-        // window.onload = function () {
-          var canvas = document.getElementById('canvas1'),
-              log = document.getElementById('log'),
-              context = canvas.getContext('2d'),
-              ball0 = new Ball(30, '#8bc72b'),
-              ball1 = new Ball(20, '#016cb0'),
-              bounce = -1.0;
+        var canvas = document.getElementById('canvas1'),
+            context = canvas.getContext('2d'),
+            ball0 = new Ball(30, '#8bc72b'),
+            ball1 = new Ball(20, '#016cb0'),
+            bounce = -1.0,
+            check = true;
 
-          ball0.lineWidth = 0;
-          ball1.lineWidth = 0;
+        ball0.lineWidth = 0;
+        ball1.lineWidth = 0;
 
-          ball0.mass = ball0.radius*ball0.radius;
-          ball0.x = ball0.radius;
-          ball0.y = ball0.radius;
-          ball0.vx = 1;
-          ball0.vy = 1;
+        ball0.mass = ball0.radius*ball0.radius;
+        ball0.x = ball0.radius;
+        ball0.y = ball0.radius;
+        ball0.vx = 0.5;
+        ball0.vy = 0.5;
 
-          ball1.mass = ball1.radius*ball1.radius;
-          ball1.x = ball1.radius;
-          ball1.y = canvas.height - ball1.radius;
-          ball1.vx = 1;
-          ball1.vy = -1;
+        ball1.mass = ball1.radius*ball1.radius;
+        ball1.x = ball1.radius;
+        ball1.y = canvas.height - ball1.radius;
+        ball1.vx = 0.5;
+        ball1.vy = -0.5;
 
-          var unity = false;
-          log.value = 'Big ball speed: ' + Math.round(Math.sqrt(ball0.vy*ball0.vy+ball0.vx*ball0.vx)*100);
+        var unity = false;
 
-          function checkCollision (ball0, ball1) {
-            // console.log(Math.sqrt(ball0.vy*ball0.vy+ball0.vx*ball0.vx))
-            var dx = ball1.x - ball0.x,
-                dy = ball1.y - ball0.y,
-                dist = Math.sqrt(dx * dx + dy * dy),
-                r = ball1.radius,
-                R = ball0.radius;
-                // a0 = Math.atan2(ball0.vx, ball0.vy),
-                // a1 = Math.atan2(ball1.vx, ball1.vy);
-            //collision handling code here
-            if (!unity) {
-                if (dist < ball0.radius + ball1.radius) {
-                  unity = true;
-                  ball0.vx = (ball0.mass*ball0.vx + ball1.mass*ball1.vx) / (ball0.mass + ball1.mass);
-                  ball0.vy = (ball0.mass*ball0.vy + ball1.mass*ball1.vy) / (ball0.mass + ball1.mass);
-                  ball0.color = '#5aa'
-                  log.value = 'Big ball speed: ' + Math.round((Math.sqrt(ball0.vy*ball0.vy+ball0.vx*ball0.vx))*100);
-                }
-            } else {
-                if (ball1.radius > 0) {
-                    ball0.radius = Math.sqrt(ball0.radius*ball0.radius + 2*ball1.radius - 1);
-                    ball1.radius -= 1;
-                } else {
-                    ball1.x = 0;
-                    ball1.y = 0;
-                    ball1.vx = 0;
-                    ball1.vy = 0;
-                    unity = false;
-                }
-            }
+        function checkCollision (ball0, ball1) {
+
+          var dx = ball1.x - ball0.x,
+              dy = ball1.y - ball0.y,
+              dist = Math.sqrt(dx * dx + dy * dy),
+              r = ball1.radius,
+              R = ball0.radius;
+              // a0 = Math.atan2(ball0.vx, ball0.vy),
+              // a1 = Math.atan2(ball1.vx, ball1.vy);
+          //collision handling code here
+          if (!unity) {
+              if (dist < ball0.radius + ball1.radius) {
+                unity = true;
+                ball0.vx = (ball0.mass*ball0.vx + ball1.mass*ball1.vx) / (ball0.mass + ball1.mass);
+                ball0.vy = (ball0.mass*ball0.vy + ball1.mass*ball1.vy) / (ball0.mass + ball1.mass);
+                ball0.color = '#5aa'
+              }
+          } else {
+              if (ball1.radius > 0) {
+                  ball0.radius = Math.sqrt(ball0.radius*ball0.radius + 2*ball1.radius - 1);
+                  ball1.radius -= 1;
+              } else {
+                  ball1.x = 0;
+                  ball1.y = 0;
+                  ball1.vx = 0;
+                  ball1.vy = 0;
+                  unity = false;
+                  check = false;
+              }
           }
+        }
 
-          function checkWalls (ball) {
-            if (ball.x + ball.radius > canvas.width) {
-              ball.x = canvas.width - ball.radius;
-              ball.vx *= bounce;
-            } else if (ball.x - ball.radius < 0) {
-              ball.x = ball.radius;
-              ball.vx *= bounce;
-            }
-            if (ball.y + ball.radius > canvas.height) {
-              ball.y = canvas.height - ball.radius;
-              ball.vy *= bounce;
-            } else if (ball.y - ball.radius < 0) {
-              ball.y = ball.radius;
-              ball.vy *= bounce;
-            }
+        function checkWalls (ball) {
+          if (ball.x + ball.radius > canvas.width) {
+            ball.x = canvas.width - ball.radius;
+            ball.vx *= bounce;
+          } else if (ball.x - ball.radius < 0) {
+            ball.x = ball.radius;
+            ball.vx *= bounce;
           }
+          if (ball.y + ball.radius > canvas.height) {
+            ball.y = canvas.height - ball.radius;
+            ball.vy *= bounce;
+          } else if (ball.y - ball.radius < 0) {
+            ball.y = ball.radius;
+            ball.vy *= bounce;
+          }
+        }
 
-          (function drawFrame () {
-            window.requestAnimationFrame(drawFrame, canvas);
+        (function drawFrame () {
+          window.requestAnimationFrame(drawFrame, canvas);
 
-            context.fillStyle = 'rgba(0,0,0,0.5)';
-            context.fillRect(0, 0, canvas.width, canvas.height);
+          context.clearRect(0, 0, canvas.width, canvas.height);
 
-            ball0.x += ball0.vx;
-            ball0.y += ball0.vy;
-            ball1.x += ball1.vx;
-            ball1.y += ball1.vy;
-            checkCollision(ball0, ball1);
-            checkWalls(ball0);
+          ball0.x += ball0.vx;
+          ball0.y += ball0.vy;
+          ball1.x += ball1.vx;
+          ball1.y += ball1.vy;
+          checkCollision(ball0, ball1);
+          checkWalls(ball0);
+          ball0.draw(context);
+          if (check === true) {
             checkWalls(ball1);
-            ball0.draw(context);
             ball1.draw(context);
-          }());
-        // };
-
+          }
+        }());
 

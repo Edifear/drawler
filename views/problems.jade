@@ -13,7 +13,14 @@ block content
                 a(href='#') Механіка
                 ul
                     li
-                        a(href='#', data-href='/problems/ball') Graph
+                        a(href='#',class='init prob-link',data-href='/problems/inelastic-collision') Непружні зіткнення
+                    li
+                        a(href='#',class='prob-link',data-href='/problems/granade') "граната-уламки"
+            li
+                a(href='#') Електродинаміка
+                ul
+                    li
+                        a(href='#',class='prob-link',data-href='/problems/line-gravity') Рух часток
             //- li
             //-     a(href='/problems/graph') Graph
             //- li
@@ -40,4 +47,8 @@ block content
             //-     a(href='/problems/granade') granade
 
     section(class='iframe-box')
-        iframe(src='', width='640', height='500')
+        iframe(src='', width='725', height='500')
+        form(id='comment',action='/',method='POST')
+            textarea(id='commentText',width='325',height='67',name='comment')
+            input(class='save-btn',type='submit',value='SAVE')
+
